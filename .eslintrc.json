@@ -25,7 +25,10 @@
           "params": false
         }
       }
-    ]
+    ],
+    "unicorn/prefer-module": "off",
+    "unicorn/no-null": "off",
+    "unicorn/no-useless-undefined": "off"
   },
   "overrides": [
     {
