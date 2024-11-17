@@ -5,23 +5,7 @@ import { randomUUID } from 'node:crypto';
 import { jwtVerify, SignJWT } from 'jose';
 import { cookies } from 'next/headers';
 
-export interface SessionConfig {
-  secret: string;
-  expiresIn: number;
-  jwt: {
-    algorithm: 'HS256';
-    expiresIn: string;
-  };
-  cookie: {
-    name: string;
-    options: {
-      httpOnly: boolean;
-      secure: boolean;
-      sameSite: 'lax' | 'strict' | 'none';
-      path: string;
-    };
-  };
-}
+import { SessionConfig } from '@/types/session.type';
 
 export class SessionService {
   private readonly key: Uint8Array;
