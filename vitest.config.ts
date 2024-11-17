@@ -12,11 +12,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./src/tests/setup-test-environment.ts'],
     include: ['./src/**/*.{spec,test}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    exclude: [
-      String.raw`.*\/node_modules\/.*`,
-      String.raw`.*\/build\/.*`,
-      String.raw`.*\/postgres-data\/.*`,
-    ],
+    exclude: [String.raw`.*\/node_modules\/.*`, String.raw`.*\/build\/.*`, String.raw`.*\/postgres-data\/.*`],
     watch: true,
     coverage: {
       reporter: ['text', 'json', 'html'],

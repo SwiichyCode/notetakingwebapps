@@ -13,11 +13,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Session {
   id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  password  String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  handle    String   @unique
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  emailVerified DateTime?
+  verificationToken String? @unique
+  lastVerificationEmailSentAt DateTime?
+  resetPasswordToken String? @unique
+  resetPasswordExpiresAt   DateTime?
+  sessions  Session[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }

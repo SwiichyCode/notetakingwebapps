@@ -7,8 +7,7 @@ dotenv.config({ path: '.env' });
 
 const prisma = new PrismaClient();
 
-const prettyPrint = (object: any) =>
-  console.log(JSON.stringify(object, undefined, 2));
+const prettyPrint = (object: any) => console.log(JSON.stringify(object, undefined, 2));
 
 async function seed() {
   const user = await prisma.user.create({

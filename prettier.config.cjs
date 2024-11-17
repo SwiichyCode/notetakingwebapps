@@ -1,4 +1,7 @@
+/** @type {import("prettier").Config} */
+
 module.exports = {
+  plugins: ['prettier-plugin-tailwindcss'],
   arrowParens: 'avoid',
   bracketSameLine: false,
   bracketSpacing: true,
@@ -6,7 +9,7 @@ module.exports = {
   insertPragma: false,
   jsxSingleQuote: false,
   plugins: ['prettier-plugin-tailwindcss'],
-  printWidth: 80,
+  printWidth: 120,
   proseWrap: 'always',
   quoteProps: 'as-needed',
   requirePragma: false,
