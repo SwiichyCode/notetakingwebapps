@@ -2,6 +2,8 @@
 
 import { redirect } from 'next/navigation';
 
+import { routes } from '@/routes';
+
 import { ResetPasswordService } from '../../application/services/reset-password.service';
 import { PrismaAuthRepository } from '../../infrastructure/repositories/prisma-auth.repository';
 import { BcryptPasswordService } from '../../infrastructure/services/bcrypt-password.service';
@@ -42,5 +44,5 @@ export async function resetPasswordAction(
     };
   }
 
-  redirect('/login?message=password-reset-success');
+  redirect(`${routes.login}?message=password-reset-success`);
 }

@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { routes } from '@/routes';
 
 interface FormFieldPasswordProps extends React.ComponentProps<'input'> {
   label: string;
@@ -22,7 +23,7 @@ export const FormFieldPassword = ({ label, status, showInfo = true, ...props }: 
       <div className="flex items-center justify-between">
         <Label htmlFor="password">{label}</Label>
         {status === 'login' && (
-          <Link href="/forgot-password" className="text-sm text-muted-foreground underline">
+          <Link href={routes['forgot-password']} className="text-sm text-muted-foreground underline">
             Forgot
           </Link>
         )}

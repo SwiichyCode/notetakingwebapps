@@ -2,6 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { PropsWithChildren } from 'react';
 
+import { routes } from '@/routes';
+
 type AuthCardProps = PropsWithChildren<{
   status: 'login' | 'signup' | 'verify-email' | 'forgot-password' | 'reset-password';
 }>;
@@ -13,7 +15,7 @@ const CONTENT_MAP = {
     link: {
       sub: 'No account yet?',
       text: 'Sign up',
-      href: '/signup',
+      href: routes.signup,
     },
   },
   signup: {
@@ -22,7 +24,7 @@ const CONTENT_MAP = {
     link: {
       sub: 'Already have an account?',
       text: 'Login',
-      href: '/login',
+      href: routes.login,
     },
   },
   'verify-email': {

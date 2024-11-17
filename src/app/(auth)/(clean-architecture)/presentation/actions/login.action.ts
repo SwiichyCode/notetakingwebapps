@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 
 import prisma from '@/lib/prisma';
+import { routes } from '@/routes';
 
 import { AuthService } from '../../application/services/auth.service';
 import { SessionService } from '../../application/services/session.service';
@@ -45,7 +46,7 @@ export async function loginAction(state: AuthFormState, formData: FormData): Pro
   // 3. Création de la session
   if (result.user) {
     await sessionService.create(result.user.id);
-    redirect('/dashboard');
+    redirect(routes.dashboard);
   }
 
   return { message: 'Une erreur est survenue' };

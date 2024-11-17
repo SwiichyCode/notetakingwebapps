@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
+import { routes } from '@/routes';
 
 import { verifyEmailAction } from '../(clean-architecture)/presentation/actions/verify-email.action';
 import { AuthCard } from '../(clean-architecture)/presentation/components/auth-card';
@@ -22,7 +23,7 @@ export default async function VerifyEmailPage({ searchParams }: { searchParams: 
   return (
     <AuthCard status="verify-email">
       <Button variant="link">
-        <Link href="/login">Login</Link>
+        <Link href={routes.login}>Login</Link>
       </Button>
     </AuthCard>
   );
