@@ -9,5 +9,5 @@ export const routes = {
   'reset-password': '/reset-password',
 };
 
-export const protectedRoutes = [routes.dashboard];
+export const protectedRoutes = [routes.dashboard, routes.archived];
 export const publicRoutes = [routes.login, routes.signup, routes.home];

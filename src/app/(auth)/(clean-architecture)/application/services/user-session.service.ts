@@ -5,12 +5,14 @@ import { cookies } from 'next/headers';
 import { Session } from '@/types/session.type';
 
 import { AuthRepository } from '../ports/auth.repository';
+import { CookieService } from './cookie.service';
 import { SessionService } from './session.service';
 
 export class UserSessionService {
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly sessionService: SessionService,
+    private readonly cookieService: CookieService,
   ) {}
 
   private isSession(payload: unknown): payload is Session {
@@ -27,7 +29,7 @@ export class UserSessionService {
       return null;
     }
 
-    const payload = await this.sessionService.decrypt(sessionCookie.value);
+    const payload = await this.cookieService.decrypt(sessionCookie.value);
     if (!this.isSession(payload)) {
       return null;
     }

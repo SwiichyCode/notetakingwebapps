@@ -1,9 +1,9 @@
 export const SESSION_CONFIG = {
   secret: process.env.SESSION_SECRET!,
-  expiresIn: Date.now() + 1000 * 60 * 60 * 24 * 30, // 30 jours
+  expiresIn: Date.now() + 1000 * 60 * 60 * 24 * 30,
   jwt: {
     algorithm: 'HS256' as const,
-    expiresIn: '1hr',
+    expiresIn: '30d',
   },
   cookie: {
     name: 'session',
@@ -12,6 +12,7 @@ export const SESSION_CONFIG = {
       secure: true,
       sameSite: 'lax' as const,
       path: '/',
+      maxAge: 30 * 24 * 60 * 60,
     },
   },
 } as const;

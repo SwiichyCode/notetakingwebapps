@@ -6,6 +6,7 @@ import prisma from '@/lib/prisma';
 import { routes } from '@/routes';
 
 import { AuthService } from '../../application/services/auth.service';
+import { CookieService } from '../../application/services/cookie.service';
 import { SessionService } from '../../application/services/session.service';
 import { SESSION_CONFIG } from '../../infrastructure/config/session.config';
 import { PrismaAuthRepository } from '../../infrastructure/repositories/prisma-auth.repository';
@@ -15,7 +16,8 @@ import { AuthFormState, LoginFormSchema } from '../schemas/definitions';
 // Initialisation des services
 const authRepository = new PrismaAuthRepository();
 const passwordService = new BcryptPasswordService();
-const sessionService = new SessionService(SESSION_CONFIG, prisma);
+const cookieService = new CookieService(SESSION_CONFIG);
+const sessionService = new SessionService(cookieService, SESSION_CONFIG, prisma);
 
 const authService = new AuthService(authRepository, passwordService);
 
