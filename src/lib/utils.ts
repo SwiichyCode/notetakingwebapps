@@ -10,3 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 export function generateVerificationToken() {
   return randomBytes(32).toString('hex');
 }
+
+export function generateRandomUUID() {
+  return randomBytes(16).toString('hex');
+}

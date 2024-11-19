@@ -1,7 +1,9 @@
 export const routes = {
   home: '/',
-  dashboard: '/dashboard',
+  dashboard: '/dashboard/notes',
+  createNote: '/dashboard/notes/create',
   archived: '/dashboard/archived',
+  settings: '/dashboard/settings',
   login: '/login',
   signup: '/signup',
   'verify-email': '/verify-email',

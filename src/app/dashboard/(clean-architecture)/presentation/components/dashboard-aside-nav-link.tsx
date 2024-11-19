@@ -13,7 +13,7 @@ type NavLinkProps = {
   exact?: boolean; // Pour gérer les correspondances exactes ou partielles
 };
 
-export const NavLink = ({ href, icon, label, exact = true }: NavLinkProps) => {
+export const DashboardAsideNavLink = ({ href, icon, label, exact = true }: NavLinkProps) => {
   const pathname = usePathname();
   const isActive = exact ? pathname === href : pathname.startsWith(href);
 

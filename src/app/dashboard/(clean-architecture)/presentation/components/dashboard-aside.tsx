@@ -6,7 +6,7 @@ import { HomeIcon } from '@/components/icons/home-icon';
 import { TagIcon } from '@/components/icons/tag-icon';
 import { routes } from '@/routes';
 
-import { NavLink } from './nav-link';
+import { DashboardAsideNavLink } from './dashboard-aside-nav-link';
 
 const DashboardAsideLogo = () => {
   return (
@@ -17,7 +17,7 @@ const DashboardAsideLogo = () => {
 };
 
 const DashboardAsideLink = ({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) => {
-  return <NavLink href={href} icon={icon} label={label} />;
+  return <DashboardAsideNavLink href={href} icon={icon} label={label} exact={false} />;
 };
 
 const DashboardAsideNavigation = () => {
