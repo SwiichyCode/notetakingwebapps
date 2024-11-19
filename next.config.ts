@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/',
-        destination: '/dashboard',
-        permanent: true,
+        destination: '/dashboard/notes',
+        permanent: false,
       },
     ];
   },
