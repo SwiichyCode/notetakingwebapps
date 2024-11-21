@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 import { ClockIcon } from '@/components/icons/clock-icon';
 import { TagIcon } from '@/components/icons/tag-icon';
 import { Button } from '@/components/ui/button';
+import { ButtonSubmit } from '@/components/ui/button-submit';
 
 type NotesContentProps = {
   note: Note;
@@ -15,14 +16,12 @@ export const NoteTitle = ({ title }: { title: string }) => {
   return <h2 className="text-2xl font-bold">{title}</h2>;
 };
 
-export const NoteDetail = ({ title, icon, children }: { title: string; icon: ReactNode; children: ReactNode }) => {
+export const NoteDetail = ({ title, icon, children }: { title?: string; icon: ReactNode; children: ReactNode }) => {
   return (
     <div className="flex items-center gap-2 text-sm">
       <div className="flex w-28 items-center gap-2 text-[#2B303B]">
         {icon} <span>{title}</span>
       </div>
-
-      <span>{title}</span>
 
       {children}
     </div>
@@ -42,13 +41,14 @@ export const NoteDivider = () => {
 };
 
 export const NoteContent = ({ content }: { content: string }) => {
-  return <section className="prose prose-sm max-w-none py-4 text-sm text-[#232530]">{content}</section>;
+  return <section className="max-w-none py-4 text-sm text-[#232530]">{content}</section>;
 };
 
 export const NoteActions = () => {
   return (
     <div className="flex items-center gap-2">
-      <Button>Save Note</Button>
+      <ButtonSubmit>Save Note</ButtonSubmit>
+      <Button variant="outline">Cancel</Button>
     </div>
   );
 };
