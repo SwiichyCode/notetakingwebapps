@@ -41,7 +41,7 @@ export class EmailVerificationService {
 
     const newToken = this.generateVerificationToken();
     await this.authRepository.updateUserVerification(user.id, newToken);
-    await this.emailRepository.sendVerificationEmail(email, newToken);
+    await this.emailRepository.sendSignupConfirmationEmail(email, newToken);
 
     return { success: true };
   }

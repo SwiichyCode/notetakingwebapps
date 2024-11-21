@@ -1,10 +1,10 @@
 import Image from 'next/image';
 
 import LogoutButton from './(auth)/(clean-architecture)/presentation/components/logout-button';
-import { getSession } from './(auth)/(clean-architecture)/presentation/middleware/auth.middleware';
+import { getCurrentSession } from './(auth)/(clean-architecture)/presentation/middleware/auth.middleware';
 
 export default async function Home() {
-  const session = await getSession();
+  const session = await getCurrentSession();
 
   return (
     <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">

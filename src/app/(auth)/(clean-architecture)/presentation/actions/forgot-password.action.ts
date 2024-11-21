@@ -1,17 +1,10 @@
 'use server';
 
-import { ResetPasswordService } from '../../application/services/reset-password.service';
-import { PrismaAuthRepository } from '../../infrastructure/repositories/prisma-auth.repository';
-import { BcryptPasswordService } from '../../infrastructure/services/bcrypt-password.service';
-import { NodeMailerEmailService } from '../../infrastructure/services/email.service';
+import { container } from '../../infrastructure/config/container';
 import { ForgotPasswordFormState, ForgotPasswordSchema } from '../schemas/definitions';
 
-// Initialisation des services
-const authRepository = new PrismaAuthRepository();
-const emailService = new NodeMailerEmailService();
-const passwordService = new BcryptPasswordService();
-
-const resetPasswordService = new ResetPasswordService(authRepository, emailService, passwordService);
+// Appel des services
+const resetPasswordService = container.getResetPasswordService();
 
 export async function forgotPasswordAction(
   state: ForgotPasswordFormState,

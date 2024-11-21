@@ -1,13 +1,9 @@
 'use server';
 
-import { EmailVerificationService } from '../../application/services/email-verification.service';
-import { PrismaAuthRepository } from '../../infrastructure/repositories/prisma-auth.repository';
-import { NodeMailerEmailService } from '../../infrastructure/services/email.service';
+import { container } from '../../infrastructure/config/container';
 
-// Initialisation des services
-const authRepository = new PrismaAuthRepository();
-const emailService = new NodeMailerEmailService();
-const emailVerificationService = new EmailVerificationService(authRepository, emailService);
+// Appel des services
+const emailVerificationService = container.getEmailVerificationService();
 
 export async function verifyEmailAction(token: string) {
   return emailVerificationService.verify(token);

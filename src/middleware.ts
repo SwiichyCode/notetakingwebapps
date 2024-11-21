@@ -1,9 +1,8 @@
-import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { CookieService } from '@/app/(auth)/(clean-architecture)/application/services/cookie.service';
-import { SESSION_CONFIG } from '@/app/(auth)/(clean-architecture)/infrastructure/config/session.config';
 import { protectedRoutes, publicRoutes, routes } from '@/routes';
+
+import { getCurrentSession } from './app/(auth)/(clean-architecture)/presentation/middleware/auth.middleware';
 
 export const config = {
   matcher: [
@@ -13,9 +12,6 @@ export const config = {
     // Ajoutez d'autres routes spécifiques selon vos besoins
   ],
 };
-
-// Initialisation du service de cookie
-const cookieService = new CookieService(SESSION_CONFIG);
 
 // 1. Specify protected and public routes
 const protectedRoutesSet = new Set(protectedRoutes);
@@ -28,18 +24,18 @@ export default async function middleware(request: NextRequest) {
   // Log pour debug
   console.log('[Middleware] Processing path:', path);
 
-  const isProtectedRoute = protectedRoutesSet.has(path);
+  const isProtectedPath = [...protectedRoutesSet].some(route => path.startsWith(route) || path === route);
   const isPublicRoute = publicRoutesSet.has(path);
 
-  // 3. Decrypt the session from the cookie
-  const cookiesStore = await cookies();
-  const cookie = cookiesStore.get('session')?.value;
-  const session = await cookieService.decrypt(cookie);
+  // 3. Get the current session
+  const session = await getCurrentSession();
 
   console.log(`[Middleware] Route ${path} - Session:`, session ? 'authenticated' : 'unauthenticated');
 
   // 4. Redirect
-  if (isProtectedRoute && !session?.userId) {
+  if (isProtectedPath && !session?.userId) {
+    console.log('[Middleware] Redirecting to login');
+
     return NextResponse.redirect(new URL(routes.login, request.nextUrl));
   }
 

@@ -5,6 +5,12 @@ export type Session = {
   exp: number;
 };
 
+export interface SessionPayload {
+  userId: string;
+  expiresAt: Date;
+  handle: string;
+}
+
 export type SessionConfig = {
   secret: string;
   expiresIn: number;

@@ -1,39 +1,50 @@
 'server-only';
 
-import { randomUUID } from 'node:crypto';
+import { v4 as uuidv4 } from 'uuid';
 
-import { SessionConfig } from '@/types/session.type';
+import { SessionConfig, SessionPayload } from '@/types/session.type';
 
-import { CookieService } from './cookie.service';
+import { CookieRepository } from '../ports/cookie.repository';
+import { SessionRepository } from '../ports/session.repository';
 
 export class SessionService {
   constructor(
-    private readonly cookieService: CookieService,
+    private readonly cookieRepository: CookieRepository,
+    private readonly sessionRepository: SessionRepository,
     private readonly config: SessionConfig,
-    private readonly prisma: any,
   ) {}
 
   async create(userId: string) {
     const expiresAt = new Date(this.config.expiresIn);
-    const handle = randomUUID();
+    const handle = uuidv4();
 
-    const session = await this.prisma.session.create({
-      data: { userId, expiresAt, handle },
+    const session = await this.sessionRepository.create({
+      userId,
+      expiresAt,
+      handle,
     });
 
-    const token = await this.cookieService.encrypt({
+    const token = await this.cookieRepository.encrypt({
       userId: session.userId,
       expiresAt: session.expiresAt,
       handle: session.handle,
     });
 
-    await this.cookieService.setCookie(token);
+    await this.cookieRepository.setCookie(token);
 
     return session;
   }
 
+  async getCurrentSession(): Promise<SessionPayload | null> {
+    const token = await this.cookieRepository.getCookie();
+    if (!token) return null;
+
+    const session = await this.cookieRepository.decrypt<SessionPayload>(token);
+    return session;
+  }
+
   async delete() {
-    await this.cookieService.removeCookie();
+    await this.cookieRepository.removeCookie();
   }
 
   public getConfig() {

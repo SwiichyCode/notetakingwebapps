@@ -1,12 +1,12 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Session } from '@/types/session.type';
+import { SessionPayload } from '@/types/session.type';
 
 import { logout } from '../middleware/auth.middleware';
 
 interface LogoutButtonProps {
-  session: Session | null;
+  session: SessionPayload | null;
 }
 
 export default function LogoutButton({ session }: LogoutButtonProps) {

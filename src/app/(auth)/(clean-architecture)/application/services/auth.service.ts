@@ -2,14 +2,14 @@
 
 import { generateVerificationToken } from '@/lib/utils';
 
-import { PasswordService } from '../../infrastructure/services/bcrypt-password.service';
 import { AuthResult, CreateUserDTO, LoginDTO } from '../dtos/user.dtos';
 import { AuthRepository } from '../ports/auth.repository';
+import { PasswordRepository } from '../ports/password.repository';
 
 export class AuthService {
   constructor(
     private readonly authRepository: AuthRepository,
-    private readonly passwordService: PasswordService,
+    private readonly passwordRepository: PasswordRepository,
   ) {}
 
   async login({ email, password }: LoginDTO): Promise<AuthResult> {
@@ -31,7 +31,7 @@ export class AuthService {
       };
     }
 
-    const isValid = await this.passwordService.verify(password, user.password);
+    const isValid = await this.passwordRepository.verify(password, user.password);
     if (!isValid) {
       return {
         success: false,
@@ -55,7 +55,7 @@ export class AuthService {
       };
     }
 
-    const hashedPassword = await this.passwordService.hash(data.password);
+    const hashedPassword = await this.passwordRepository.hash(data.password);
     const verificationToken = generateVerificationToken();
 
     const user = await this.authRepository.createUser({

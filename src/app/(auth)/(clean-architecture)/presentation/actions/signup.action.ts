@@ -1,19 +1,11 @@
 'use server';
 
-import { AuthService } from '../../application/services/auth.service';
-import { EmailVerificationService } from '../../application/services/email-verification.service';
-import { PrismaAuthRepository } from '../../infrastructure/repositories/prisma-auth.repository';
-import { BcryptPasswordService } from '../../infrastructure/services/bcrypt-password.service';
-import { NodeMailerEmailService } from '../../infrastructure/services/email.service';
+import { container } from '../../infrastructure/config/container';
 import { AuthFormState, SignupFormSchema } from '../schemas/definitions';
 
-// Initialisation des services
-const authRepository = new PrismaAuthRepository();
-const passwordService = new BcryptPasswordService();
-const emailService = new NodeMailerEmailService();
-
-const authService = new AuthService(authRepository, passwordService);
-const emailVerificationService = new EmailVerificationService(authRepository, emailService);
+// Appel des services
+const authService = container.getAuthService();
+const emailVerificationService = container.getEmailVerificationService();
 
 export async function signupAction(state: AuthFormState, formData: FormData): Promise<AuthFormState> {
   // 1. Validation des données

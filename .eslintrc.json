@@ -28,7 +28,8 @@
     ],
     "unicorn/prefer-module": "off",
     "unicorn/no-null": "off",
-    "unicorn/no-useless-undefined": "off"
+    "unicorn/no-useless-undefined": "off",
+    "playwright/no-standalone-expect": "off"
   },
   "overrides": [
     {

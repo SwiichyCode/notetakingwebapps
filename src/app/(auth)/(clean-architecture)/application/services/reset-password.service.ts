@@ -1,15 +1,17 @@
+'server-only';
+
 import { generateVerificationToken } from '@/lib/utils';
 
-import { PasswordService } from '../../infrastructure/services/bcrypt-password.service';
 import { InitiateResetDTO, ResetPasswordDTO, ResetPasswordResult } from '../dtos/reset-password.dtos';
 import { AuthRepository } from '../ports/auth.repository';
 import { EmailRepository } from '../ports/email.repository';
+import { PasswordRepository } from '../ports/password.repository';
 
 export class ResetPasswordService {
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly emailRepository: EmailRepository,
-    private readonly passwordService: PasswordService,
+    private readonly passwordRepository: PasswordRepository,
   ) {}
 
   async initiateReset(data: InitiateResetDTO): Promise<ResetPasswordResult> {
@@ -39,7 +41,7 @@ export class ResetPasswordService {
       return { success: false, error: 'Reset token has expired.' };
     }
 
-    const hashedPassword = await this.passwordService.hash(data.newPassword);
+    const hashedPassword = await this.passwordRepository.hash(data.newPassword);
     await this.authRepository.updatePassword(user.id, hashedPassword);
     await this.emailRepository.sendPasswordResetSuccessEmail(user.email);
 
