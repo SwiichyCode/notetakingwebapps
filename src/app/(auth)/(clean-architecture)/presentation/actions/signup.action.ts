@@ -3,11 +3,11 @@
 import { container } from '../../infrastructure/config/container';
 import { AuthFormState, SignupFormSchema } from '../schemas/definitions';
 
-// Appel des services
-const authService = container.getAuthService();
-const emailVerificationService = container.getEmailVerificationService();
-
 export async function signupAction(state: AuthFormState, formData: FormData): Promise<AuthFormState> {
+  // Appel des services
+  const authService = container.getAuthService();
+  const emailVerificationService = container.getEmailVerificationService();
+
   // 1. Validation des données
   const validatedFields = SignupFormSchema.safeParse({
     email: formData.get('email'),

@@ -7,11 +7,11 @@ import { routes } from '@/routes';
 import { container } from '../../infrastructure/config/container';
 import { AuthFormState, LoginFormSchema } from '../schemas/definitions';
 
-// Appel des services
-const authService = container.getAuthService();
-const sessionService = container.getSessionService();
-
 export async function loginAction(state: AuthFormState, formData: FormData): Promise<AuthFormState> {
+  // Appel des services
+  const authService = container.getAuthService();
+  const sessionService = container.getSessionService();
+
   // 1. Validation des données
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get('email'),
@@ -42,8 +42,4 @@ export async function loginAction(state: AuthFormState, formData: FormData): Pro
   }
 
   return { message: 'Une erreur est survenue' };
-}
-
-export async function logoutAction() {
-  await sessionService.delete();
 }

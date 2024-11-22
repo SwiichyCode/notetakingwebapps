@@ -1,6 +1,6 @@
 'server-only';
 
-import { generateVerificationToken } from '@/lib/utils';
+import { v4 as uuidv4 } from 'uuid';
 
 import { InitiateResetDTO, ResetPasswordDTO, ResetPasswordResult } from '../dtos/reset-password.dtos';
 import { AuthRepository } from '../ports/auth.repository';
@@ -21,7 +21,7 @@ export class ResetPasswordService {
       return { success: true }; // Pour des raisons de sécurité, on renvoie toujours success
     }
 
-    const token = generateVerificationToken();
+    const token = uuidv4();
     const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
 
     await this.authRepository.updateResetToken(user.id, token, expires);

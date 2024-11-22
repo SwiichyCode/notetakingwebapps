@@ -1,7 +1,5 @@
 'server-only';
 
-import { generateVerificationToken } from '@/lib/utils';
-
 import { AuthResult, CreateUserDTO, LoginDTO } from '../dtos/user.dtos';
 import { AuthRepository } from '../ports/auth.repository';
 import { PasswordRepository } from '../ports/password.repository';
@@ -32,6 +30,7 @@ export class AuthService {
     }
 
     const isValid = await this.passwordRepository.verify(password, user.password);
+
     if (!isValid) {
       return {
         success: false,
@@ -56,7 +55,7 @@ export class AuthService {
     }
 
     const hashedPassword = await this.passwordRepository.hash(data.password);
-    const verificationToken = generateVerificationToken();
+    const verificationToken = this.generateVerificationToken();
 
     const user = await this.authRepository.createUser({
       ...data,
@@ -68,5 +67,9 @@ export class AuthService {
       success: true,
       user,
     };
+  }
+
+  private generateVerificationToken(): string {
+    return Math.random().toString(36).slice(2, 15);
   }
 }

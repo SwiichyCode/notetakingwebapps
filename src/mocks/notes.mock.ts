@@ -1,6 +1,5 @@
 import { Note } from '@prisma/client';
-
-import { generateRandomUUID } from '@/lib/utils';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface NoteMock extends Note {
   slug: string;
@@ -8,23 +7,23 @@ export interface NoteMock extends Note {
 
 export const notesMock: NoteMock[] = [
   {
-    id: generateRandomUUID(),
+    id: uuidv4(),
     title: 'React Performance Optimization',
     content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
     tags: ['React', 'Performance', 'Optimization'],
     slug: 'react-performance-optimization',
     createdAt: new Date(),
     updatedAt: new Date(),
-    userId: generateRandomUUID(),
+    userId: uuidv4(),
   },
   {
-    id: generateRandomUUID(),
+    id: uuidv4(),
     title: 'Japan Travel Planning',
     content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
     tags: ['Travel', 'Personal'],
     slug: 'japan-travel-planning',
     createdAt: new Date(),
     updatedAt: new Date(),
-    userId: generateRandomUUID(),
+    userId: uuidv4(),
   },
 ];
