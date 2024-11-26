@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { AuthCard } from '../(clean-architecture)/presentation/components/auth-card';
-import { ResetPasswordForm } from '../(clean-architecture)/presentation/components/reset-password-form';
+import { AuthCard } from '@/core/presentation/components/authentication/auth-card';
+import { ResetPasswordForm } from '@/core/presentation/components/authentication/reset-password-form';
 
 export default async function ResetPasswordPage({ searchParams }: { searchParams: Promise<{ token?: string }> }) {
   const params = await searchParams;

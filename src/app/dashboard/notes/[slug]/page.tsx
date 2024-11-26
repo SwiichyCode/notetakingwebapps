@@ -1,11 +1,11 @@
 import { redirect } from 'next/navigation';
 
-import { notesMock } from '@/mocks/notes.mock';
-import { routes } from '@/routes';
+import { notesMock } from '@/config/mocks/notes.mock';
+import { routes } from '@/config/routes';
 
-import { NoteActions } from '../../(clean-architecture)/presentation/components/note-actions';
-import { NoteDisplay } from '../../(clean-architecture)/presentation/components/note-display';
-import { NotesList } from '../../(clean-architecture)/presentation/components/notes-list';
+import { NoteActions } from '../../../../core/presentation/components/dashboard/note-actions';
+import { NoteDisplay } from '../../../../core/presentation/components/dashboard/note-display';
+import { NotesList } from '../../../../core/presentation/components/dashboard/notes-list';
 
 export default async function NotePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

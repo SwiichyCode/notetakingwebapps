@@ -1,10 +1,9 @@
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
-import { routes } from '@/routes';
-
-import { verifyEmailAction } from '../(clean-architecture)/presentation/actions/verify-email.action';
-import { AuthCard } from '../(clean-architecture)/presentation/components/auth-card';
+import { routes } from '@/config/routes';
+import { verifyEmailAction } from '@/core/presentation/actions/verify-email.action';
+import { AuthCard } from '@/core/presentation/components/authentication/auth-card';
+import { Button } from '@/core/presentation/components/common/ui/button';
 
 export default async function VerifyEmailPage({ searchParams }: { searchParams: Promise<{ token?: string }> }) {
   const params = await searchParams;

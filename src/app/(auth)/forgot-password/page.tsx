@@ -1,5 +1,5 @@
-import { AuthCard } from '../(clean-architecture)/presentation/components/auth-card';
-import { ForgotPasswordForm } from '../(clean-architecture)/presentation/components/forgot-password-form';
+import { AuthCard } from '@/core/presentation/components/authentication/auth-card';
+import { ForgotPasswordForm } from '@/core/presentation/components/authentication/forgot-password-form';
 
 export default function ForgotPasswordPage() {
   return (

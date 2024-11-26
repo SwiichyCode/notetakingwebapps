@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
-import LogoutButton from './(auth)/(clean-architecture)/presentation/components/logout-button';
-import { getCurrentSession } from './(auth)/(clean-architecture)/presentation/middleware/auth.middleware';
+import LogoutButton from '@/core/presentation/components/authentication/logout-button';
+import { getCurrentSession } from '@/core/presentation/middleware/auth.middleware';
 
 export default async function Home() {
   const session = await getCurrentSession();

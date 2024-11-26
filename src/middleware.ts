@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { protectedRoutes, publicRoutes, routes } from '@/routes';
-
-import { getCurrentSession } from './app/(auth)/(clean-architecture)/presentation/middleware/auth.middleware';
+import { protectedRoutes, publicRoutes, routes } from '@/config/routes';
+import { getCurrentSession } from '@/core/presentation/middleware/auth.middleware';
 
 export const config = {
   matcher: [

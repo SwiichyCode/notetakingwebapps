@@ -1,8 +1,7 @@
-import { getCurrentSession } from '@/app/(auth)/(clean-architecture)/presentation/middleware/auth.middleware';
-import { notesMock } from '@/mocks/notes.mock';
-
-import { NoteForm } from '../../(clean-architecture)/presentation/components/note-form';
-import { NotesList } from '../../(clean-architecture)/presentation/components/notes-list';
+import { notesMock } from '@/config/mocks/notes.mock';
+import { NoteForm } from '@/core/presentation/components/dashboard/note-form';
+import { NotesList } from '@/core/presentation/components/dashboard/notes-list';
+import { getCurrentSession } from '@/core/presentation/middleware/auth.middleware';
 
 export default async function CreateNotePage() {
   const user = await getCurrentSession();

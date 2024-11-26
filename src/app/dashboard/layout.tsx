@@ -1,7 +1,7 @@
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
-import { DashboardAside } from './(clean-architecture)/presentation/components/dashboard-aside';
-import { DashboardHeader } from './(clean-architecture)/presentation/components/dashboard-header';
+import { DashboardAside } from '@/core/presentation/components/dashboard/dashboard-aside';
+import { DashboardHeader } from '@/core/presentation/components/dashboard/dashboard-header';
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
   return (

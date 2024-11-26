@@ -51,4 +51,3 @@ model Note {
 
   @@index([userId])
 }
- 

@@ -1,5 +1,5 @@
-import { AuthCard } from '../(clean-architecture)/presentation/components/auth-card';
-import { SignupForm } from '../(clean-architecture)/presentation/components/signup-form';
+import { AuthCard } from '@/core/presentation/components/authentication/auth-card';
+import { SignupForm } from '@/core/presentation/components/authentication/signup-form';
 
 export default function SignupPage() {
   return (

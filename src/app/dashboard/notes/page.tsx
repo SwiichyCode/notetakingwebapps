@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
 
-import { notesMock } from '@/mocks/notes.mock';
-import { routes } from '@/routes';
+import { notesMock } from '@/config/mocks/notes.mock';
+import { routes } from '@/config/routes';
 
-import { NotesList } from '../(clean-architecture)/presentation/components/notes-list';
+import { NotesList } from '../../../core/presentation/components/dashboard/notes-list';
 
 // Documentation: Cette page affiche uniquement la navigation.
 // si il existe une note, redirige vers la note en question.
