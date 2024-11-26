@@ -10,7 +10,7 @@ type NavLinkProps = {
   href: string;
   icon: React.ReactNode;
   label: string;
-  exact?: boolean; // Pour gérer les correspondances exactes ou partielles
+  exact?: boolean;
 };
 
 export const DashboardAsideNavLink = ({ href, icon, label, exact = true }: NavLinkProps) => {

@@ -22,12 +22,10 @@ describe('signupAction Integration', () => {
   let mockEmailVerificationService: EmailVerificationService;
 
   beforeEach(() => {
-    // Initialisation des repositories
     mockAuthRepository = new MockAuthRepository();
     mockPasswordRepository = new MockPasswordRepository();
     mockEmailRepository = new MockEmailRepository();
 
-    // Création des services avec les repositories mockés
     mockAuthService = new AuthService(mockAuthRepository, mockPasswordRepository) as jest.Mocked<AuthService>;
     mockEmailVerificationService = new EmailVerificationService(
       mockAuthRepository,
@@ -36,7 +34,6 @@ describe('signupAction Integration', () => {
 
     mockEmailVerificationService.resendVerification = jest.fn();
 
-    // Configuration des mocks pour le container
     (container.getAuthService as jest.Mock).mockReturnValue(mockAuthService);
     (container.getEmailVerificationService as jest.Mock).mockReturnValue(mockEmailVerificationService);
   });

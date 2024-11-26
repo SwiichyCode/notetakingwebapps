@@ -7,7 +7,6 @@ import { container } from '@/core/infrastructure/config/container';
 import { ResetPasswordFormSchema } from '@/core/presentation/schemas/auth-form.schema';
 import { ResetPasswordFormState } from '@/core/presentation/schemas/auth-form.state';
 
-// Appel des services
 const resetPasswordService = container.getResetPasswordService();
 
 export async function resetPasswordAction(

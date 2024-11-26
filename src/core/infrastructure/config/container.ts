@@ -17,13 +17,11 @@ import { SESSION_CONFIG } from './session.config';
 class Container {
   private static instance: Container;
 
-  // Repositories
   private readonly authRepository = new PrismaAuthRepository();
   private readonly cookieRepository: CookieRepository = new NextCookieAdapter(SESSION_CONFIG);
   private readonly emailRepository: EmailRepository = new ResendEmailAdapter();
   private readonly passwordRepository: PasswordRepository = new BcryptPasswordAdapter();
 
-  // Services
   private readonly authService = new AuthService(this.authRepository, this.passwordRepository);
 
   private readonly sessionService = new SessionService(

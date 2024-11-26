@@ -145,18 +145,5 @@ describe('AuthService', () => {
       expect(mockPasswordRepository.hash).toHaveBeenCalledWith('password123');
       expect(mockAuthRepository.createUser).toHaveBeenCalled();
     });
-
-    // it('should handle errors during user creation', async () => {
-    //   mockAuthRepository.findUserByEmail.mockResolvedValue(null);
-    //   mockAuthRepository.createUser.mockImplementation(() => Promise.reject(new Error('Database error')));
-
-    //   const result = await authService.signup({
-    //     email: 'test@example.com',
-    //     password: 'password123',
-    //   });
-
-    //   expect(result.success).toBe(false);
-    //   expect(result.error).toBe('An error occurred during signup');
-    // });
   });
 });

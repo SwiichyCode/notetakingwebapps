@@ -26,16 +26,14 @@ describe('loginAction Integration', () => {
   let mockSessionService: SessionService;
 
   beforeEach(() => {
-    // Initialisation des repositories
     mockAuthRepository = new MockAuthRepository();
     mockPasswordRepository = new MockPasswordRepository();
     mockSessionRepository = new MockSessionRepository();
     mockCookieRepository = new MockCookieRepository();
-    // Création des services avec les repositories mockés
+
     mockAuthService = new AuthService(mockAuthRepository, mockPasswordRepository) as jest.Mocked<AuthService>;
     mockSessionService = new SessionService(mockCookieRepository, mockSessionRepository, SESSION_CONFIG);
 
-    // Configuration des mocks pour le container
     (container.getAuthService as jest.Mock).mockReturnValue(mockAuthService);
     (container.getSessionService as jest.Mock).mockReturnValue(mockSessionService);
   });

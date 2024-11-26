@@ -8,11 +8,9 @@ import { LoginFormSchema } from '@/core/presentation/schemas/auth-form.schema';
 import { AuthFormState } from '@/core/presentation/schemas/auth-form.state';
 
 export async function loginAction(state: AuthFormState, formData: FormData): Promise<AuthFormState> {
-  // Appel des services
   const authService = container.getAuthService();
   const sessionService = container.getSessionService();
 
-  // 1. Validation des données
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -24,7 +22,6 @@ export async function loginAction(state: AuthFormState, formData: FormData): Pro
     };
   }
 
-  // 2. Authentification
   const result = await authService.login(validatedFields.data);
 
   if (!result.success) {
@@ -35,7 +32,6 @@ export async function loginAction(state: AuthFormState, formData: FormData): Pro
     };
   }
 
-  // 3. Création de la session
   if (result.user) {
     await sessionService.create(result.user.id);
     redirect(routes.dashboard);

@@ -2,7 +2,6 @@
 
 import { container } from '@/core/infrastructure/config/container';
 
-// Appel des services
 const emailVerificationService = container.getEmailVerificationService();
 
 export async function verifyEmailAction(token: string) {

@@ -18,7 +18,7 @@ export class ResetPasswordService {
     const user = await this.authRepository.findUserByEmail(data.email);
 
     if (!user) {
-      return { success: true }; // Pour des raisons de sécurité, on renvoie toujours success
+      return { success: true };
     }
 
     const token = uuidv4();
