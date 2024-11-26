@@ -2,26 +2,33 @@
 
 ## Project Objective
 
-This project is a note-taking application developed with Next.js, TypeScript, and Tailwind CSS. It aims to demonstrate the application of SOLID principles and hexagonal architecture to create a robust, maintainable, and scalable codebase that can be extended to larger projects.
+This project is a note-taking application developed with Next.js, TypeScript, and Tailwind CSS. It aims to demonstrate
+the application of SOLID principles and clean architecture to create a robust, maintainable, and scalable codebase that
+can be extended to larger projects.
 
 ## Project Structure
 
-The project is structured according to hexagonal architecture principles, promoting a clear separation of concerns and independence from specific frameworks and technologies. Here is an overview of the main structure:
+The project is structured according to clean architecture principles, promoting a clear separation of concerns and
+independence from specific frameworks and technologies. Here is an overview of the main structure:
 
 - **src/app**: Contains the application pages, organized by features (e.g., dashboard, auth).
-- **src/core**: Groups reusable components, actions, and application services. This is where hexagonal architecture is primarily implemented.
+- **src/core**: Groups reusable components, actions, and application services. This is where clean architecture is
+  primarily implemented.
 - **src/config**: Contains global configurations, including routes and mocks.
 - **prisma**: Manages database configuration and Prisma schemas.
 
-## SOLID Principles and Hexagonal Architecture
+## SOLID Principles and Clean Architecture
 
 - **Single Responsibility Principle (SRP)**: Each module or class has a single well-defined responsibility.
-- **Open/Closed Principle (OCP)**: The system is open to extension but closed to modification, facilitating the addition of new features without altering existing code.
-- **Liskov Substitution Principle (LSP)**: Objects of a derived class can replace objects of the base class without altering the program's functionality.
+- **Open/Closed Principle (OCP)**: The system is open to extension but closed to modification, facilitating the addition
+  of new features without altering existing code.
+- **Liskov Substitution Principle (LSP)**: Objects of a derived class can replace objects of the base class without
+  altering the program's functionality.
 - **Interface Segregation Principle (ISP)**: Interfaces are client-specific, avoiding unnecessary dependencies.
 - **Dependency Inversion Principle (DIP)**: High-level modules do not depend on low-level modules but on abstractions.
 
-Hexagonal architecture allows for the separation of business logic from user interfaces and infrastructures, making the code more testable and adaptable to technological changes.
+Clean architecture allows for the separation of business logic from user interfaces and infrastructures, making the code
+more testable and adaptable to technological changes.
 
 ## Key Features
 
@@ -41,7 +48,9 @@ To start the project locally, follow these steps:
 
 ## Project Goal
 
-The goal of this project is to serve as a model for modern web applications, emphasizing best development practices such as the use of reusable components, effective state management, and integration of third-party services. It is designed to be easy to set up while providing a robust foundation for more complex projects.
+The goal of this project is to serve as a model for modern web applications, emphasizing best development practices such
+as the use of reusable components, effective state management, and integration of third-party services. It is designed
+to be easy to set up while providing a robust foundation for more complex projects.
 
 ## Technologies Used
 
