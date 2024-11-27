@@ -1,15 +1,17 @@
 import { CreateNoteDTO } from '../dtos/note.dtos';
-import { CustomError } from '../errors/custom-error';
+import { FailedToCreateNoteError } from '../errors/note-errors';
 import { NoteRepository } from '../ports/note.repository';
 
 export class NoteService {
   constructor(private readonly noteRepository: NoteRepository) {}
 
-  async createNote(note: CreateNoteDTO): Promise<void> {
-    try {
-      await this.noteRepository.createNote(note);
-    } catch {
-      throw new CustomError('Failed to create note', 500);
+  async createNote(data: CreateNoteDTO) {
+    const note = await this.noteRepository.createNote(data);
+
+    if (!note) {
+      throw new FailedToCreateNoteError();
     }
+
+    return note;
   }
 }

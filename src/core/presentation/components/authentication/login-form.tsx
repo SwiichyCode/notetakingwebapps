@@ -10,6 +10,7 @@ import { LoginFormSchema } from '@/core/presentation/schemas/auth-form.schema';
 import { loginAction } from '../../actions/login.action';
 import { Form } from '../common/ui/form';
 import { InputForm } from '../common/ui/input-form';
+import { FormFieldPassword } from './form-field-password';
 
 export const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -23,7 +24,7 @@ export const LoginForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof LoginFormSchema>) => {
+  function onSubmit(values: z.infer<typeof LoginFormSchema>) {
     startTransition(async () => {
       const payload = await loginAction(values);
 
@@ -31,14 +32,14 @@ export const LoginForm = () => {
         setErrorMessage(payload.serverError);
       }
     });
-  };
+  }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
         <div className="flex flex-col gap-4">
           <InputForm control={form.control} label="Email Address" name="email" type="text" />
-          <InputForm control={form.control} label="Password" name="password" type="password" />
+          <FormFieldPassword control={form.control} status="login" label="Password" name="password" type="password" />
 
           {errorMessage && <p className="text-red-500">{errorMessage}</p>}
 

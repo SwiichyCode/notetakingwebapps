@@ -1,4 +1,4 @@
-export interface InitiateResetDTO {
+export interface InitiatePasswordResetDTO {
   email: string;
 }
 

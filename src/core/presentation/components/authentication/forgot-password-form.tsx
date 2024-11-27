@@ -1,31 +1,59 @@
 'use client';
 
-import { useActionState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import { forgotPasswordAction } from '@/core/presentation/actions/forgot-password.action';
 import { ButtonSubmit } from '@/core/presentation/components/common/ui/button-submit';
-import { FormField } from '@/core/presentation/components/common/ui/form-field';
+
+import { forgotPasswordAction } from '../../actions/forgot-password.action';
+import { ForgotPasswordSchema } from '../../schemas/auth-form.schema';
+import { Form } from '../common/ui/form';
+import { InputForm } from '../common/ui/input-form';
 
 export const ForgotPasswordForm = () => {
-  const [state, action] = useActionState(forgotPasswordAction, undefined);
+  const [isPending, startTransition] = useTransition();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const form = useForm<z.infer<typeof ForgotPasswordSchema>>({
+    resolver: zodResolver(ForgotPasswordSchema),
+    defaultValues: {
+      email: '',
+    },
+  });
+
+  function onSubmit(data: z.infer<typeof ForgotPasswordSchema>) {
+    startTransition(async () => {
+      const payload = await forgotPasswordAction(data);
+
+      if (payload?.serverError) {
+        setErrorMessage(payload.serverError);
+      } else {
+        setSuccessMessage('If an account exists with this email, you will receive a password reset link.');
+      }
+    });
+  }
 
   return (
-    <form action={action} className="w-full">
-      <div className="flex flex-col gap-4">
-        <FormField
-          label="Email Address"
-          name="email"
-          type="email"
-          error={state?.errors?.email}
-          placeholder="email@example.com"
-        />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+        <div className="flex flex-col gap-4">
+          <InputForm
+            control={form.control}
+            label="Email Address"
+            name="email"
+            type="email"
+            placeholder="email@example.com"
+          />
 
-        <ButtonSubmit>Send Reset Link</ButtonSubmit>
-      </div>
+          <ButtonSubmit isPending={isPending}>Send Reset Link</ButtonSubmit>
+        </div>
 
-      {state?.message && (
-        <p className={`mt-4 text-sm ${state.success ? 'text-green-500' : 'text-red-500'}`}>{state.message}</p>
-      )}
-    </form>
+        {successMessage && <p className="mt-4 text-sm text-green-500">{successMessage}</p>}
+        {errorMessage && <p className="mt-4 text-sm text-red-500">{errorMessage}</p>}
+      </form>
+    </Form>
   );
 };

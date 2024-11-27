@@ -26,7 +26,7 @@ export const SignupForm = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof SignupFormSchema>) => {
+  function onSubmit(values: z.infer<typeof SignupFormSchema>) {
     startTransition(async () => {
       const payload = await signupAction(values);
 
@@ -36,7 +36,7 @@ export const SignupForm = () => {
         setSuccessMessage('Please check your email to verify your account.');
       }
     });
-  };
+  }
 
   return (
     <Form {...form}>

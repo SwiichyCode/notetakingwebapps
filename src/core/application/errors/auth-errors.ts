@@ -45,3 +45,17 @@ export class UserWithThisEmailAlreadyExistsError extends CustomError {
     this.metadata = { email };
   }
 }
+
+export class InvalidResetTokenError extends CustomError {
+  constructor() {
+    super('Invalid or expired reset token.', 400);
+    this.name = 'InvalidResetTokenError';
+  }
+}
+
+export class ExpiredResetTokenError extends CustomError {
+  constructor() {
+    super('Reset token has expired.', 400);
+    this.name = 'ExpiredResetTokenError';
+  }
+}

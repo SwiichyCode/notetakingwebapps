@@ -1,39 +1,67 @@
 'use client';
 
-import { useActionState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState, useTransition } from 'react';
+import { Form, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import { resetPasswordAction } from '@/core/presentation/actions/reset-password.action';
 import { FormFieldPassword } from '@/core/presentation/components/authentication/form-field-password';
 import { ButtonSubmit } from '@/core/presentation/components/common/ui/button-submit';
+
+import { resetPasswordActionClient } from '../../actions/reset-password.action';
+import { ResetPasswordFormSchema } from '../../schemas/auth-form.schema';
 
 interface ResetPasswordFormProps {
   token: string;
 }
 
 export const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
-  const [state, action] = useActionState(resetPasswordAction, undefined);
+  const [isPending, startTransition] = useTransition();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const form = useForm<z.infer<typeof ResetPasswordFormSchema>>({
+    resolver: zodResolver(ResetPasswordFormSchema),
+    defaultValues: {
+      password: '',
+      confirmPassword: '',
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof ResetPasswordFormSchema>) {
+    startTransition(async () => {
+      const payload = await resetPasswordActionClient(values);
+
+      if (payload?.serverError) {
+        setErrorMessage(payload.serverError);
+      } else {
+        setSuccessMessage('Password reset successful');
+      }
+    });
+  }
 
   return (
-    <form action={action} className="w-full">
-      <input type="hidden" name="token" value={token} />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+        <input type="hidden" name="token" value={token} />
 
-      <div className="flex flex-col gap-4">
-        <FormFieldPassword status="reset" label="New Password" name="password" error={state?.errors?.password} />
+        <div className="flex flex-col gap-4">
+          <FormFieldPassword control={form.control} status="reset" label="New Password" name="password" />
 
-        <FormFieldPassword
-          status="reset"
-          label="Confirm New Password"
-          name="confirmPassword"
-          error={state?.errors?.confirmPassword}
-          showInfo={false}
-        />
+          <FormFieldPassword
+            control={form.control}
+            status="reset"
+            label="Confirm New Password"
+            name="confirmPassword"
+            showInfo={false}
+          />
 
-        <ButtonSubmit>Reset Password</ButtonSubmit>
-      </div>
+          <ButtonSubmit isPending={isPending}>Reset Password</ButtonSubmit>
+        </div>
 
-      {state?.message && (
-        <p className={`mt-4 text-sm ${state.success ? 'text-green-500' : 'text-red-500'}`}>{state.message}</p>
-      )}
-    </form>
+        {errorMessage && <p className="mt-4 text-sm text-red-500">{errorMessage}</p>}
+        {successMessage && <p className="mt-4 text-sm text-green-500">{successMessage}</p>}
+      </form>
+    </Form>
   );
 };
