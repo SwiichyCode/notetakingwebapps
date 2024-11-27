@@ -9,7 +9,7 @@ export class NoteService {
     try {
       await this.noteRepository.createNote(note);
     } catch {
-      throw new CustomError('Failed to create note', 'NOTE_CREATION_FAILED');
+      throw new CustomError('Failed to create note', 500);
     }
   }
 }

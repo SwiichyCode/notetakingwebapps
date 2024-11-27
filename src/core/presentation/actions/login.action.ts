@@ -2,40 +2,21 @@
 
 import { redirect } from 'next/navigation';
 
+import { actionClient } from '@/config/libs/next-safe-action';
 import { routes } from '@/config/routes';
 import { container } from '@/core/infrastructure/config/container';
 import { LoginFormSchema } from '@/core/presentation/schemas/auth-form.schema';
-import { AuthFormState } from '@/core/presentation/schemas/auth-form.state';
 
-export async function loginAction(state: AuthFormState, formData: FormData): Promise<AuthFormState> {
+export const loginAction = actionClient.schema(LoginFormSchema).action(async ({ parsedInput }) => {
   const authService = container.getAuthService();
   const sessionService = container.getSessionService();
 
-  const validatedFields = LoginFormSchema.safeParse({
-    email: formData.get('email'),
-    password: formData.get('password'),
-  });
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    };
-  }
-
-  const result = await authService.login(validatedFields.data);
-
-  if (!result.success) {
-    return {
-      message: result.error,
-      isEmailVerification: result.isEmailVerification,
-      email: result.email,
-    };
-  }
-
-  if (result.user) {
+  try {
+    const result = await authService.login(parsedInput);
     await sessionService.create(result.user.id);
-    redirect(routes.dashboard);
+  } catch (error) {
+    throw error;
   }
 
-  return { message: 'Une erreur est survenue' };
-}
+  redirect(routes.dashboard);
+});

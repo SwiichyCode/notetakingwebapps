@@ -1,4 +1,4 @@
-import { User } from '../../domain/entities/user.entity';
+import { User } from '@/core/domain/entities/user.entity';
 
 export interface CreateUserDTO {
   email: string;
@@ -12,10 +12,16 @@ export interface LoginDTO {
   password: string;
 }
 
-export interface AuthResult {
-  success: boolean;
-  error?: string;
-  isEmailVerification?: boolean;
-  email?: string;
-  user?: User;
+export interface UserResponseDTO {
+  id: string;
+  email: string;
+  emailVerified: Date | null;
+}
+
+export function toUserResponseDTO(user: User): UserResponseDTO {
+  return {
+    id: user.id,
+    email: user.email,
+    emailVerified: user.emailVerified,
+  };
 }

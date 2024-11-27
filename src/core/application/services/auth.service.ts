@@ -1,6 +1,12 @@
 'server-only';
 
-import { AuthResult, CreateUserDTO, LoginDTO } from '../dtos/user.dtos';
+import { CreateUserDTO, LoginDTO, toUserResponseDTO, UserResponseDTO } from '../dtos/user.dtos';
+import {
+  EmailNotVerifiedError,
+  FailedToCreateUserError,
+  InvalidCredentialsError,
+  UserWithThisEmailAlreadyExistsError,
+} from '../errors/auth-errors';
 import { AuthRepository } from '../ports/auth.repository';
 import { PasswordRepository } from '../ports/password.repository';
 
@@ -10,48 +16,31 @@ export class AuthService {
     private readonly passwordRepository: PasswordRepository,
   ) {}
 
-  async login({ email, password }: LoginDTO): Promise<AuthResult> {
+  async login({ email, password }: LoginDTO): Promise<{ user: UserResponseDTO }> {
     const user = await this.authRepository.findUserByEmail(email);
 
     if (!user) {
-      return {
-        success: false,
-        error: 'Invalid credentials',
-      };
+      throw new InvalidCredentialsError();
     }
 
     if (!user.isEmailVerified()) {
-      return {
-        success: false,
-        error: 'Please verify your email before logging in',
-        isEmailVerification: true,
-        email: user.email,
-      };
+      throw new EmailNotVerifiedError(user.email);
     }
 
     const isValid = await this.passwordRepository.verify(password, user.password);
 
     if (!isValid) {
-      return {
-        success: false,
-        error: 'Invalid credentials',
-      };
+      throw new InvalidCredentialsError();
     }
 
-    return {
-      success: true,
-      user,
-    };
+    return { user: toUserResponseDTO(user) };
   }
 
-  async signup(data: CreateUserDTO): Promise<AuthResult> {
+  async signup(data: CreateUserDTO): Promise<{ user: UserResponseDTO }> {
     const existingUser = await this.authRepository.findUserByEmail(data.email);
 
     if (existingUser) {
-      return {
-        success: false,
-        error: 'User with this email already exists',
-      };
+      throw new UserWithThisEmailAlreadyExistsError(existingUser.email);
     }
 
     const hashedPassword = await this.passwordRepository.hash(data.password);
@@ -63,10 +52,11 @@ export class AuthService {
       verificationToken,
     });
 
-    return {
-      success: true,
-      user,
-    };
+    if (!user) {
+      throw new FailedToCreateUserError();
+    }
+
+    return { user: toUserResponseDTO(user) };
   }
 
   private generateVerificationToken(): string {

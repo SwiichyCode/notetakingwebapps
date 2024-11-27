@@ -46,4 +46,20 @@ export class ResendEmailAdapter implements EmailRepository {
         `,
     });
   }
+
+  async sendExistingAccountAlert(email: string): Promise<void> {
+    await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: email,
+      subject: 'Duplicate account notification',
+      html: `
+      <h1>Account Creation Attempt Detected</h1>
+      <p>Hello,</p>
+      <p>We noticed that an attempt was made to create an account using your email address. If this was you, please log in to your existing account. If not, you can safely ignore this email.</p>
+      <p>If you need assistance, feel free to contact us.</p>
+      <p>Best regards,</p>
+      <p>The Support Team</p>
+    `,
+    });
+  }
 }

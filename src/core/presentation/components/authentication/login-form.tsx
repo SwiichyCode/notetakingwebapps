@@ -1,25 +1,50 @@
 'use client';
-import { useActionState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import { loginAction } from '@/core/presentation/actions/login.action';
-import { FormFieldPassword } from '@/core/presentation/components/authentication/form-field-password';
 import { ButtonSubmit } from '@/core/presentation/components/common/ui/button-submit';
-import { FormField } from '@/core/presentation/components/common/ui/form-field';
+import { LoginFormSchema } from '@/core/presentation/schemas/auth-form.schema';
+
+import { loginAction } from '../../actions/login.action';
+import { Form } from '../common/ui/form';
+import { InputForm } from '../common/ui/input-form';
 
 export const LoginForm = () => {
-  const [state, action] = useActionState(loginAction, undefined);
+  const [isPending, startTransition] = useTransition();
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+
+  const form = useForm<z.infer<typeof LoginFormSchema>>({
+    resolver: zodResolver(LoginFormSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof LoginFormSchema>) => {
+    startTransition(async () => {
+      const payload = await loginAction(values);
+
+      if (payload?.serverError) {
+        setErrorMessage(payload.serverError);
+      }
+    });
+  };
 
   return (
-    <form action={action} className="w-full">
-      <div className="flex flex-col gap-4">
-        <FormField label="Email Address" name="email" type="text" error={state?.errors?.email} />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+        <div className="flex flex-col gap-4">
+          <InputForm control={form.control} label="Email Address" name="email" type="text" />
+          <InputForm control={form.control} label="Password" name="password" type="password" />
 
-        <FormFieldPassword status="login" label="Password" name="password" error={state?.errors?.password} />
+          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
 
-        {state?.message && <p className="text-red-500">{state.message}</p>}
-
-        <ButtonSubmit>Login</ButtonSubmit>
-      </div>
-    </form>
+          <ButtonSubmit isPending={isPending}>Login</ButtonSubmit>
+        </div>
+      </form>
+    </Form>
   );
 };

@@ -3,19 +3,30 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import type { Control } from 'react-hook-form';
 
 import { routes } from '@/config/routes';
-import { Input } from '@/core/presentation/components/common/ui/input';
 import { Label } from '@/core/presentation/components/common/ui/label';
 
+import { InputForm } from '../common/ui/input-form';
+
 interface FormFieldPasswordProps extends React.ComponentProps<'input'> {
+  control?: Control<any>;
   label: string;
+  name: string;
   status: 'login' | 'signup' | 'reset';
   showInfo?: boolean;
   error?: string[];
 }
 
-export const FormFieldPassword = ({ label, status, showInfo = true, ...props }: FormFieldPasswordProps) => {
+export const FormFieldPassword = ({
+  control,
+  label,
+  name,
+  status,
+  showInfo = true,
+  ...props
+}: FormFieldPasswordProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -29,7 +40,7 @@ export const FormFieldPassword = ({ label, status, showInfo = true, ...props }: 
         )}
       </div>
       <div className="relative">
-        <Input type={showPassword ? 'text' : 'password'} {...props} />
+        <InputForm control={control} name={name} type={showPassword ? 'text' : 'password'} {...props} />
 
         <button
           type="button"

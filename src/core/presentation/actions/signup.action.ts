@@ -1,33 +1,22 @@
 'use server';
 
+import { actionClient } from '@/config/libs/next-safe-action';
+import { UserWithThisEmailAlreadyExistsError } from '@/core/application/errors/auth-errors';
 import { container } from '@/core/infrastructure/config/container';
 import { SignupFormSchema } from '@/core/presentation/schemas/auth-form.schema';
-import { AuthFormState } from '@/core/presentation/schemas/auth-form.state';
 
-export async function signupAction(state: AuthFormState, formData: FormData): Promise<AuthFormState> {
+export const signupAction = actionClient.schema(SignupFormSchema).action(async ({ parsedInput }) => {
   const authService = container.getAuthService();
   const emailVerificationService = container.getEmailVerificationService();
 
-  const validatedFields = SignupFormSchema.safeParse({
-    email: formData.get('email'),
-    password: formData.get('password'),
-  });
+  try {
+    await authService.signup(parsedInput);
+    await emailVerificationService.resendVerification(parsedInput.email);
+  } catch (error) {
+    if (error instanceof UserWithThisEmailAlreadyExistsError) {
+      await emailVerificationService.sendExistingAccountAlert(parsedInput.email);
+    }
 
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    };
+    throw error;
   }
-
-  const result = await authService.signup(validatedFields.data);
-
-  if (!result.success) {
-    return { message: result.error };
-  }
-
-  if (result.user) {
-    await emailVerificationService.resendVerification(result.user.email);
-  }
-
-  return { message: 'Please check your email to verify your account.' };
-}
+});

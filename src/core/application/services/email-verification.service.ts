@@ -1,5 +1,6 @@
 'server-only';
 
+import { UserNotFoundError } from '../errors/auth-errors';
 import { AuthRepository } from '../ports/auth.repository';
 import { EmailRepository } from '../ports/email.repository';
 
@@ -44,6 +45,16 @@ export class EmailVerificationService {
     await this.emailRepository.sendSignupConfirmationEmail(email, newToken);
 
     return { success: true };
+  }
+
+  async sendExistingAccountAlert(email: string): Promise<void> {
+    const user = await this.authRepository.findUserByEmail(email);
+
+    if (!user) {
+      throw new UserNotFoundError(email);
+    }
+
+    await this.emailRepository.sendExistingAccountAlert(email);
   }
 
   private generateVerificationToken(): string {
