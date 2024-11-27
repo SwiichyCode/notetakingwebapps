@@ -1,4 +1,6 @@
 import prisma from '@/config/libs/prisma';
+import { NoteService } from '@/core/application/services/note.service';
+import { UserService } from '@/core/application/services/user.service';
 
 import { CookieRepository } from '../../application/ports/cookie.repository';
 import { EmailRepository } from '../../application/ports/email.repository';
@@ -11,6 +13,7 @@ import { BcryptPasswordAdapter } from '../adapters/bcrypt-password.adapter';
 import { NextCookieAdapter } from '../adapters/next-cookie.adapter';
 import { ResendEmailAdapter } from '../adapters/resend-email.adapter';
 import { PrismaAuthRepository } from '../repositories/prisma-auth.repository';
+import { PrismaNoteRepository } from '../repositories/prisma-note.repository';
 import { PrismaSessionRepository } from '../repositories/prisma-session.repository';
 import { SESSION_CONFIG } from './session.config';
 
@@ -18,11 +21,14 @@ class Container {
   private static instance: Container;
 
   private readonly authRepository = new PrismaAuthRepository();
+  private readonly noteRepository = new PrismaNoteRepository();
   private readonly cookieRepository: CookieRepository = new NextCookieAdapter(SESSION_CONFIG);
   private readonly emailRepository: EmailRepository = new ResendEmailAdapter();
   private readonly passwordRepository: PasswordRepository = new BcryptPasswordAdapter();
 
   private readonly authService = new AuthService(this.authRepository, this.passwordRepository);
+  private readonly userService = new UserService(this.authRepository);
+  private readonly noteService = new NoteService(this.noteRepository);
 
   private readonly sessionService = new SessionService(
     this.cookieRepository,
@@ -52,6 +58,10 @@ class Container {
     return this.authService;
   }
 
+  public getUserService(): UserService {
+    return this.userService;
+  }
+
   public getSessionService(): SessionService {
     return this.sessionService;
   }
@@ -62,6 +72,10 @@ class Container {
 
   public getResetPasswordService(): ResetPasswordService {
     return this.resetPasswordService;
+  }
+
+  public getNoteService(): NoteService {
+    return this.noteService;
   }
 }
 

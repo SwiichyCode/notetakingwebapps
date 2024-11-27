@@ -44,10 +44,10 @@ export const NoteContent = ({ content }: { content: string }) => {
   return <section className="max-w-none py-4 text-sm text-[#232530]">{content}</section>;
 };
 
-export const NoteActions = () => {
+export const NoteActions = ({ isPending }: { isPending?: boolean }) => {
   return (
     <div className="flex items-center gap-2">
-      <ButtonSubmit>Save Note</ButtonSubmit>
+      <ButtonSubmit isPending={isPending}>Save Note</ButtonSubmit>
       <Button variant="outline">Cancel</Button>
     </div>
   );

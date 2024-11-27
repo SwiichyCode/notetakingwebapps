@@ -1,16 +1,14 @@
 'use server';
 
-import prisma from '@/config/libs/prisma';
-import { UserService } from '@/core/application/services/user.service';
-import { PrismaAuthRepository } from '@/core/infrastructure/repositories/prisma-auth.repository';
+import { authActionClient } from '@/config/libs/next-safe-action';
+import { container } from '@/core/infrastructure/config/container';
 
 import { ZCreateNoteSchema } from '../schemas/note-form.schema';
 import { NoteFormState } from '../schemas/note-form.state';
 
-const authRepository = new PrismaAuthRepository();
-const userService = new UserService(authRepository);
-
 export async function createNoteAction(state: NoteFormState, formData: FormData, userId: string) {
+  const userService = container.getUserService();
+  const noteService = container.getNoteService();
   const user = await userService.getUserById(userId);
 
   if (!user) {
@@ -38,17 +36,26 @@ export async function createNoteAction(state: NoteFormState, formData: FormData,
     };
   }
 
-  await prisma.note.create({
-    data: {
-      title: validatedFields.data.title,
-      tags: validatedFields.data.tags,
-      content: validatedFields.data.content,
-      userId,
-    },
-  });
+  await noteService.createNote({ ...validatedFields.data, userId });
 
   return {
     success: true,
     message: 'Note created successfully',
   };
 }
+
+export const createNoteActionWithAuth = authActionClient
+  .schema(ZCreateNoteSchema)
+  .action(async ({ parsedInput, ctx }) => {
+    const userService = container.getUserService();
+    const noteService = container.getNoteService();
+    const user = await userService.getUserById(ctx.userId);
+
+    if (!user) {
+      return { error: 'User not found' };
+    }
+
+    await noteService.createNote({ ...parsedInput, userId: ctx.userId });
+
+    return { success: true, message: 'Note created successfully' };
+  });
