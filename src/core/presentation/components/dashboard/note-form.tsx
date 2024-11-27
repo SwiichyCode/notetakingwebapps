@@ -5,12 +5,12 @@ import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { createNoteActionWithAuth } from '@/core/presentation/actions/create-note.action';
+import { createNoteAction } from '@/core/presentation/actions/create-note.action';
 import { ClockIcon } from '@/core/presentation/components/common/icons/clock-icon';
 import { TagIcon } from '@/core/presentation/components/common/icons/tag-icon';
 
 import { useToast } from '../../hooks/use-toast';
-import { ZCreateNoteSchema } from '../../schemas/note-form.schema';
+import { CreateNoteSchema } from '../../schemas/note-form.schema';
 import { Form } from '../common/ui/form';
 import { NoteActions, NoteDetail, NoteDivider } from './note-display';
 import { NoteFormField } from './note-form-field';
@@ -31,8 +31,8 @@ export const NoteForm = ({ isCreating }: NoteFormProps) => {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof ZCreateNoteSchema>>({
-    resolver: zodResolver(ZCreateNoteSchema),
+  const form = useForm<z.infer<typeof CreateNoteSchema>>({
+    resolver: zodResolver(CreateNoteSchema),
     defaultValues: {
       title: '',
       tags: [],
@@ -40,9 +40,9 @@ export const NoteForm = ({ isCreating }: NoteFormProps) => {
     },
   });
 
-  function onSubmit(data: z.infer<typeof ZCreateNoteSchema>) {
+  function onSubmit(data: z.infer<typeof CreateNoteSchema>) {
     startTransition(async () => {
-      const payload = await createNoteActionWithAuth({
+      const payload = await createNoteAction({
         ...data,
         tags: data.tags.join(','),
       });
@@ -53,24 +53,16 @@ export const NoteForm = ({ isCreating }: NoteFormProps) => {
           title: 'Error',
           description: payload.serverError,
         });
+      } else {
+        toast({
+          title: 'Note saved',
+          description: 'Your note has been saved successfully',
+        });
       }
-
-      toast({
-        title: 'Note saved',
-        description: 'Your note has been saved successfully',
-      });
 
       form.reset();
     });
   }
-
-  // useEffect(() => {
-  //   toast({
-  //     variant: 'destructive',
-  //     title: 'Error',
-  //     description: form.formState.errors.title?.message ?? 'Something went wrong',
-  //   });
-  // }, [form.formState.errors]);
 
   return (
     <Form {...form}>

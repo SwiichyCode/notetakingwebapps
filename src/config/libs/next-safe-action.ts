@@ -1,5 +1,6 @@
 import { createSafeActionClient, DEFAULT_SERVER_ERROR_MESSAGE } from 'next-safe-action';
 
+import { CustomError } from '@/core/application/errors/custom-error';
 import { container } from '@/core/infrastructure/config/container';
 
 class ActionError extends Error {}
@@ -9,6 +10,10 @@ const actionClient = createSafeActionClient({
     console.error('Action error:', error.message);
 
     if (error instanceof ActionError) {
+      return error.message;
+    }
+
+    if (error instanceof CustomError) {
       return error.message;
     }
 
