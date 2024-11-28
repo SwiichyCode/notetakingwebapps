@@ -1,14 +1,10 @@
 'server-only';
 
-import { CreateUserDTO, LoginDTO, toUserResponseDTO, UserResponseDTO } from '../dtos/user.dtos';
-import {
-  EmailNotVerifiedError,
-  FailedToCreateUserError,
-  InvalidCredentialsError,
-  UserWithThisEmailAlreadyExistsError,
-} from '../errors/auth-errors';
+import { CreateUserDTO, LoginDTO, UserResponseDTO } from '../dtos/user.dtos';
+import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from '../errors/custom-error';
 import { AuthRepository } from '../ports/auth.repository';
 import { PasswordRepository } from '../ports/password.repository';
+import { isKnownError } from '../utils/error-handler';
 
 export class AuthService {
   constructor(
@@ -16,47 +12,53 @@ export class AuthService {
     private readonly passwordRepository: PasswordRepository,
   ) {}
 
-  async login({ email, password }: LoginDTO): Promise<{ user: UserResponseDTO }> {
-    const user = await this.authRepository.findUserByEmail(email);
+  async login(data: LoginDTO): Promise<UserResponseDTO> {
+    try {
+      const validatedData = LoginDTO.parse(data);
 
-    if (!user) {
-      throw new InvalidCredentialsError();
+      const user = await this.authRepository.findUserByEmail(validatedData.email);
+
+      if (!user) throw new NotFoundError('User');
+
+      if (!user.isEmailVerified()) throw new UnauthorizedError('Please verify your email before logging in');
+
+      const isValid = await this.passwordRepository.verify(validatedData.password, user.password);
+
+      if (!isValid) throw new UnauthorizedError('Invalid credentials');
+
+      return UserResponseDTO.parse(user);
+    } catch (error) {
+      if (isKnownError(error, [NotFoundError, UnauthorizedError])) throw error;
+
+      throw new BadRequestError('Failed to login');
     }
-
-    if (!user.isEmailVerified()) {
-      throw new EmailNotVerifiedError(user.email);
-    }
-
-    const isValid = await this.passwordRepository.verify(password, user.password);
-
-    if (!isValid) {
-      throw new InvalidCredentialsError();
-    }
-
-    return { user: toUserResponseDTO(user) };
   }
 
-  async signup(data: CreateUserDTO): Promise<{ user: UserResponseDTO }> {
-    const existingUser = await this.authRepository.findUserByEmail(data.email);
+  async signup(data: CreateUserDTO): Promise<void> {
+    try {
+      const validatedData = CreateUserDTO.parse(data);
 
-    if (existingUser) {
-      throw new UserWithThisEmailAlreadyExistsError(existingUser.email);
+      const existingUser = await this.authRepository.findUserByEmail(validatedData.email);
+
+      if (existingUser)
+        throw new ConflictError(
+          'A user with this email already exists, please check your inbox for a verification email.',
+        );
+
+      const hashedPassword = await this.passwordRepository.hash(validatedData.password);
+
+      const verificationToken = this.generateVerificationToken();
+
+      await this.authRepository.createUser({
+        ...validatedData,
+        password: hashedPassword,
+        verificationToken,
+      });
+    } catch (error) {
+      if (isKnownError(error, [ConflictError])) throw error;
+
+      throw new BadRequestError('Failed to signup');
     }
-
-    const hashedPassword = await this.passwordRepository.hash(data.password);
-    const verificationToken = this.generateVerificationToken();
-
-    const user = await this.authRepository.createUser({
-      ...data,
-      password: hashedPassword,
-      verificationToken,
-    });
-
-    if (!user) {
-      throw new FailedToCreateUserError();
-    }
-
-    return { user: toUserResponseDTO(user) };
   }
 
   private generateVerificationToken(): string {

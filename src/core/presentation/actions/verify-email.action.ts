@@ -5,7 +5,7 @@ import { container } from '@/core/infrastructure/config/container';
 const emailVerificationService = container.getEmailVerificationService();
 
 export async function verifyEmailAction(token: string) {
-  return emailVerificationService.verify(token);
+  return emailVerificationService.sendEmailVerification({ token });
 }
 
 export async function resendVerificationEmailAction(email: string | undefined) {
@@ -16,5 +16,5 @@ export async function resendVerificationEmailAction(email: string | undefined) {
     };
   }
 
-  return emailVerificationService.resendVerification(email);
+  return emailVerificationService.resendEmailVerification({ email });
 }

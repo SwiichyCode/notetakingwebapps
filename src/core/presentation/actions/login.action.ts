@@ -13,7 +13,7 @@ export const loginAction = actionClient.schema(LoginFormSchema).action(async ({ 
 
   try {
     const result = await authService.login(parsedInput);
-    await sessionService.create(result.user.id);
+    await sessionService.create(result.id);
   } catch (error) {
     throw error;
   }

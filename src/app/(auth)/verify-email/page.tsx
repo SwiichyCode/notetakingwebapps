@@ -13,11 +13,7 @@ export default async function VerifyEmailPage({ searchParams }: { searchParams: 
     return <div>No verification token provided</div>;
   }
 
-  const result = await verifyEmailAction(token);
-
-  if (!result.success) {
-    return <div>{result.error}</div>;
-  }
+  await verifyEmailAction(token);
 
   return (
     <AuthCard status="verify-email">

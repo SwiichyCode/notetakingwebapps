@@ -1,10 +1,15 @@
 import { User } from '../../domain/entities/user.entity';
-import { CreateUserDTO } from '../dtos/user.dtos';
+
+interface CreateUserParams {
+  email: string;
+  password: string;
+  verificationToken?: string;
+}
 
 export interface AuthRepository {
   findUserByEmail(email: string): Promise<User | null>;
   findUserById(userId: string): Promise<User | null>;
-  createUser(data: CreateUserDTO): Promise<User>;
+  createUser(data: CreateUserParams): Promise<User | null>;
   findUserByVerificationToken(token: string): Promise<User | null>;
   updateUserVerification(userId: string, token: string | null): Promise<void>;
   updateResetToken(userId: string, token: string | null, expires: Date | null): Promise<void>;

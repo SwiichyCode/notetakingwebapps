@@ -1,8 +1,14 @@
 'server-only';
 
-import { UserNotFoundError } from '../errors/auth-errors';
+import {
+  EmailVerificationDTO,
+  ResendEmailVerificationDTO,
+  SendExistingAccountAlertDTO,
+} from '../dtos/email-verification.dtos';
+import { BadRequestError, ConflictError, NotFoundError } from '../errors/custom-error';
 import { AuthRepository } from '../ports/auth.repository';
 import { EmailRepository } from '../ports/email.repository';
+import { isKnownError } from '../utils/error-handler';
 
 export class EmailVerificationService {
   constructor(
@@ -10,51 +16,60 @@ export class EmailVerificationService {
     private readonly emailRepository: EmailRepository,
   ) {}
 
-  async verify(token: string): Promise<{ success: boolean; error?: string }> {
-    const user = await this.authRepository.findUserByVerificationToken(token);
+  async sendEmailVerification(data: EmailVerificationDTO): Promise<void> {
+    try {
+      const validatedData = EmailVerificationDTO.parse(data);
 
-    if (!user) {
-      return { success: false, error: 'Invalid or expired verification token.' };
+      const user = await this.authRepository.findUserByVerificationToken(validatedData.token);
+
+      if (!user) throw new NotFoundError('User');
+
+      if (user.isEmailVerified()) throw new ConflictError('Email address is already verified');
+
+      await this.authRepository.updateUserVerification(user.id, null);
+    } catch (error) {
+      if (isKnownError(error, [NotFoundError, ConflictError])) throw error;
+      throw new BadRequestError('Unexpected error occurred');
     }
-
-    if (user.isEmailVerified()) {
-      return { success: false, error: 'Email already verified.' };
-    }
-
-    await this.authRepository.updateUserVerification(user.id, null);
-    return { success: true };
   }
 
-  async resendVerification(email: string): Promise<{ success: boolean; error?: string }> {
-    const user = await this.authRepository.findUserByEmail(email);
+  async resendEmailVerification(data: ResendEmailVerificationDTO): Promise<void> {
+    try {
+      const validatedData = ResendEmailVerificationDTO.parse(data);
 
-    if (!user) {
-      return { success: false, error: 'User not found.' };
+      const user = await this.authRepository.findUserByEmail(validatedData.email);
+
+      if (!user) throw new NotFoundError('User');
+
+      if (user.isEmailVerified()) throw new ConflictError('Email address is already verified');
+
+      if (!user.canResendVerificationEmail())
+        throw new BadRequestError('Please wait before requesting another verification email.');
+
+      const newToken = this.generateVerificationToken();
+
+      await this.authRepository.updateUserVerification(user.id, newToken);
+
+      await this.emailRepository.sendSignupConfirmationEmail(user.email, newToken);
+    } catch (error) {
+      if (isKnownError(error, [NotFoundError, ConflictError, BadRequestError])) throw error;
+      throw new BadRequestError('Unexpected error occurred');
     }
-
-    if (user.isEmailVerified()) {
-      return { success: false, error: 'Email already verified.' };
-    }
-
-    if (!user.canResendVerificationEmail()) {
-      return { success: false, error: 'Please wait before requesting another verification email.' };
-    }
-
-    const newToken = this.generateVerificationToken();
-    await this.authRepository.updateUserVerification(user.id, newToken);
-    await this.emailRepository.sendSignupConfirmationEmail(email, newToken);
-
-    return { success: true };
   }
 
-  async sendExistingAccountAlert(email: string): Promise<void> {
-    const user = await this.authRepository.findUserByEmail(email);
+  async sendExistingAccountAlert(data: SendExistingAccountAlertDTO): Promise<void> {
+    try {
+      const validatedData = SendExistingAccountAlertDTO.parse(data);
 
-    if (!user) {
-      throw new UserNotFoundError(email);
+      const user = await this.authRepository.findUserByEmail(validatedData.email);
+
+      if (!user) throw new NotFoundError('User');
+
+      await this.emailRepository.sendExistingAccountAlert(validatedData.email);
+    } catch (error) {
+      if (isKnownError(error, [NotFoundError, BadRequestError])) throw error;
+      throw new BadRequestError('Unexpected error occurred');
     }
-
-    await this.emailRepository.sendExistingAccountAlert(email);
   }
 
   private generateVerificationToken(): string {

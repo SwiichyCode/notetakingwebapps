@@ -1,7 +1,8 @@
 'use server';
 
 import { actionClient } from '@/config/libs/next-safe-action';
-import { UserWithThisEmailAlreadyExistsError } from '@/core/application/errors/auth-errors';
+import { ConflictError } from '@/core/application/errors/custom-error';
+import { isKnownError } from '@/core/application/utils/error-handler';
 import { container } from '@/core/infrastructure/config/container';
 import { SignupFormSchema } from '@/core/presentation/schemas/auth-form.schema';
 
@@ -11,10 +12,10 @@ export const signupAction = actionClient.schema(SignupFormSchema).action(async (
 
   try {
     await authService.signup(parsedInput);
-    await emailVerificationService.resendVerification(parsedInput.email);
+    await emailVerificationService.resendEmailVerification({ email: parsedInput.email });
   } catch (error) {
-    if (error instanceof UserWithThisEmailAlreadyExistsError) {
-      await emailVerificationService.sendExistingAccountAlert(parsedInput.email);
+    if (isKnownError(error, [ConflictError])) {
+      await emailVerificationService.sendExistingAccountAlert({ email: parsedInput.email });
     }
 
     throw error;
