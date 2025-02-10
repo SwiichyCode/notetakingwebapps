@@ -2,8 +2,7 @@ import { jwtVerify, SignJWT } from 'jose';
 import { cookies } from 'next/headers';
 
 import { SessionConfig } from '@/config/types/session.type';
-
-import { CookieRepository } from '../../application/ports/cookie.repository';
+import { CookieRepository } from '@/core/application/ports/cookie.repository';
 
 export class NextCookieAdapter implements CookieRepository {
   private readonly key: Uint8Array;

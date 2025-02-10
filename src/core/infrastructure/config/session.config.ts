@@ -6,7 +6,7 @@ export const SESSION_CONFIG = {
     expiresIn: '30d',
   },
   cookie: {
-    name: 'session',
+    name: 'session-token',
     options: {
       httpOnly: true,
       secure: true,
