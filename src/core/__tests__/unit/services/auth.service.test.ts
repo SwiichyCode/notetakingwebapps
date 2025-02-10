@@ -5,7 +5,7 @@ import {
   UserAlreadyExistsError,
 } from '@/core/application/errors/auth-errors';
 
-import { AuthService } from '../../../application/services/auth.service';
+import { AuthService } from '../../../application/services/authentication/auth.service';
 import { MockAuthRepository } from '../../mocks/mock-auth.repository';
 import { MockPasswordRepository } from '../../mocks/mock-password.repository';
 

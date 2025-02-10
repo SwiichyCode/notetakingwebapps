@@ -1,21 +1,20 @@
 import prisma from '@/config/libs/prisma';
+import { CookieRepository } from '@/core/application/ports/cookie.repository';
+import { EmailRepository } from '@/core/application/ports/email.repository';
+import { PasswordRepository } from '@/core/application/ports/password.repository';
+import { AuthService } from '@/core/application/services/authentication/auth.service';
+import { EmailVerificationService } from '@/core/application/services/authentication/email-verification.service';
+import { ResetPasswordService } from '@/core/application/services/authentication/reset-password.service';
+import { SessionService } from '@/core/application/services/authentication/session.service';
 import { NoteService } from '@/core/application/services/note.service';
 import { UserService } from '@/core/application/services/user.service';
-
-import { CookieRepository } from '../../application/ports/cookie.repository';
-import { EmailRepository } from '../../application/ports/email.repository';
-import { PasswordRepository } from '../../application/ports/password.repository';
-import { AuthService } from '../../application/services/auth.service';
-import { EmailVerificationService } from '../../application/services/email-verification.service';
-import { ResetPasswordService } from '../../application/services/reset-password.service';
-import { SessionService } from '../../application/services/session.service';
-import { BcryptPasswordAdapter } from '../adapters/bcrypt-password.adapter';
-import { NextCookieAdapter } from '../adapters/next-cookie.adapter';
-import { ResendEmailAdapter } from '../adapters/resend-email.adapter';
-import { PrismaAuthRepository } from '../repositories/prisma-auth.repository';
-import { PrismaNoteRepository } from '../repositories/prisma-note.repository';
-import { PrismaSessionRepository } from '../repositories/prisma-session.repository';
-import { SESSION_CONFIG } from './session.config';
+import { BcryptPasswordAdapter } from '@/core/infrastructure/adapters/bcrypt-password.adapter';
+import { NextCookieAdapter } from '@/core/infrastructure/adapters/next-cookie.adapter';
+import { ResendEmailAdapter } from '@/core/infrastructure/adapters/resend-email.adapter';
+import { SESSION_CONFIG } from '@/core/infrastructure/config/session.config';
+import { PrismaAuthRepository } from '@/core/infrastructure/repositories/prisma-auth.repository';
+import { PrismaNoteRepository } from '@/core/infrastructure/repositories/prisma-note.repository';
+import { PrismaSessionRepository } from '@/core/infrastructure/repositories/prisma-session.repository';
 
 class Container {
   private static instance: Container;

@@ -5,7 +5,15 @@ import { cookies } from 'next/headers';
 
 import { SessionConfig } from '@/config/types/session.type';
 
-export class CookieService {
+interface ICookieService {
+  encrypt(payload: any): Promise<string>;
+  decrypt<T>(token: string | null): Promise<T | null>;
+  setCookie(token: string): Promise<void>;
+  removeCookie(): Promise<void>;
+  getCookie(): Promise<string | undefined>;
+}
+
+export class CookieService implements ICookieService {
   private readonly key: Uint8Array;
 
   constructor(private readonly config: SessionConfig) {

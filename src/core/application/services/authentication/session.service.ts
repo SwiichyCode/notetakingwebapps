@@ -4,10 +4,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { SessionConfig, SessionPayload } from '@/config/types/session.type';
 
-import { CookieRepository } from '../ports/cookie.repository';
-import { SessionRepository } from '../ports/session.repository';
+import { CookieRepository } from '../../ports/cookie.repository';
+import { SessionRepository } from '../../ports/session.repository';
 
-export class SessionService {
+interface ISessionService {
+  create(userId: string): Promise<void>;
+  getCurrentSession(): Promise<SessionPayload | null>;
+  delete(): Promise<void>;
+}
+
+export class SessionService implements ISessionService {
   constructor(
     private readonly cookieRepository: CookieRepository,
     private readonly sessionRepository: SessionRepository,
@@ -31,8 +37,6 @@ export class SessionService {
     });
 
     await this.cookieRepository.setCookie(token);
-
-    return session;
   }
 
   async getCurrentSession(): Promise<SessionPayload | null> {
@@ -40,6 +44,7 @@ export class SessionService {
     if (!token) return null;
 
     const session = await this.cookieRepository.decrypt<SessionPayload>(token);
+
     return session;
   }
 

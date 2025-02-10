@@ -4,13 +4,19 @@ import {
   EmailVerificationDTO,
   ResendEmailVerificationDTO,
   SendExistingAccountAlertDTO,
-} from '../dtos/email-verification.dtos';
-import { BadRequestError, ConflictError, NotFoundError } from '../errors/custom-error';
-import { AuthRepository } from '../ports/auth.repository';
-import { EmailRepository } from '../ports/email.repository';
-import { isKnownError } from '../utils/error-handler';
+} from '@/core/application/dtos/email-verification.dtos';
+import { BadRequestError, ConflictError, NotFoundError } from '@/core/application/errors/custom-error';
+import { AuthRepository } from '@/core/application/ports/auth.repository';
+import { EmailRepository } from '@/core/application/ports/email.repository';
+import { isKnownError } from '@/core/application/utils/error-handler';
 
-export class EmailVerificationService {
+interface IEmailVerificationService {
+  sendEmailVerification(data: EmailVerificationDTO): Promise<void>;
+  resendEmailVerification(data: ResendEmailVerificationDTO): Promise<void>;
+  sendExistingAccountAlert(data: SendExistingAccountAlertDTO): Promise<void>;
+}
+
+export class EmailVerificationService implements IEmailVerificationService {
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly emailRepository: EmailRepository,

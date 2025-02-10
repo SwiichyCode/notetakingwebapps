@@ -1,12 +1,22 @@
 'server-only';
 
-import { CreateUserDTO, LoginDTO, UserResponseDTO } from '../dtos/user.dtos';
-import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from '../errors/custom-error';
-import { AuthRepository } from '../ports/auth.repository';
-import { PasswordRepository } from '../ports/password.repository';
-import { isKnownError } from '../utils/error-handler';
+import { CreateUserDTO, LoginDTO, UserResponseDTO } from '@/core/application/dtos/user.dtos';
+import {
+  BadRequestError,
+  ConflictError,
+  NotFoundError,
+  UnauthorizedError,
+} from '@/core/application/errors/custom-error';
+import { AuthRepository } from '@/core/application/ports/auth.repository';
+import { PasswordRepository } from '@/core/application/ports/password.repository';
+import { isKnownError } from '@/core/application/utils/error-handler';
 
-export class AuthService {
+interface IAuthService {
+  login(data: LoginDTO): Promise<UserResponseDTO>;
+  signup(data: CreateUserDTO): Promise<void>;
+}
+
+export class AuthService implements IAuthService {
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly passwordRepository: PasswordRepository,

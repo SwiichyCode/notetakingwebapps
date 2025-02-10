@@ -2,11 +2,15 @@
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { InitiatePasswordResetDTO, ResetPasswordDTO } from '../dtos/reset-password.dtos';
-import { ExpiredResetTokenError, InvalidResetTokenError, UserNotFoundError } from '../errors/auth-errors';
-import { AuthRepository } from '../ports/auth.repository';
-import { EmailRepository } from '../ports/email.repository';
-import { PasswordRepository } from '../ports/password.repository';
+import { InitiatePasswordResetDTO, ResetPasswordDTO } from '@/core/application/dtos/reset-password.dtos';
+import {
+  ExpiredResetTokenError,
+  InvalidResetTokenError,
+  UserNotFoundError,
+} from '@/core/application/errors/auth-errors';
+import { AuthRepository } from '@/core/application/ports/auth.repository';
+import { EmailRepository } from '@/core/application/ports/email.repository';
+import { PasswordRepository } from '@/core/application/ports/password.repository';
 
 interface IResetPasswordService {
   initiatePasswordReset(data: InitiatePasswordResetDTO): Promise<void>;

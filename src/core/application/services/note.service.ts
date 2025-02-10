@@ -1,8 +1,12 @@
-import { CreateNoteDTO } from '../dtos/note.dtos';
-import { FailedToCreateNoteError } from '../errors/note-errors';
-import { NoteRepository } from '../ports/note.repository';
+import { CreateNoteDTO } from '@/core/application/dtos/note.dtos';
+import { FailedToCreateNoteError } from '@/core/application/errors/note-errors';
+import { NoteRepository } from '@/core/application/ports/note.repository';
 
-export class NoteService {
+interface INoteService {
+  createNote(data: CreateNoteDTO): Promise<any>;
+}
+
+export class NoteService implements INoteService {
   constructor(private readonly noteRepository: NoteRepository) {}
 
   async createNote(data: CreateNoteDTO) {
