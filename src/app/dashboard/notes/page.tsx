@@ -1,22 +1,17 @@
 import { redirect } from 'next/navigation';
 
-import { notesMock } from '@/config/mocks/notes.mock';
-import { routes } from '@/config/routes';
+import { container } from '@/core/infrastructure/config/container';
+import { getCurrentSession } from '@/core/presentation/middleware/auth.middleware';
 
 import { NotesList } from '../../../core/presentation/components/dashboard/notes-list';
 
-// Documentation: Cette page affiche uniquement la navigation.
-// si il existe une note, redirige vers la note en question.
-
-// FIXME: Gérer le temps de chargement de la page
-
 export default async function NotesPage() {
-  // Fake l'appel à la base de données
-  const notes = await Promise.resolve(notesMock);
+  const session = await getCurrentSession();
+  const notes = await container.getNoteService().findNotesByUserId(session?.userId!);
 
-  if (notes.length > 0) {
-    redirect(routes.dashboard + '/' + notes[0].slug);
-  }
+  // if (notes.length > 0) {
+  //   redirect(routes.dashboard + '/' + slugify(notes[0].title));
+  // }
 
   return (
     <div className="grid h-screen w-full grid-cols-[20%_60%_20%]">

@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-import { SessionRepository } from '../../application/ports/session.repository';
+import { SessionRepository } from '../../application/ports/authentication/session.repository';
 
 export class PrismaSessionRepository implements SessionRepository {
   constructor(private readonly prisma: PrismaClient) {}

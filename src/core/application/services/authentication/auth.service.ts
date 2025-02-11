@@ -7,8 +7,8 @@ import {
   NotFoundError,
   UnauthorizedError,
 } from '@/core/application/errors/custom-error';
-import { AuthRepository } from '@/core/application/ports/auth.repository';
-import { PasswordRepository } from '@/core/application/ports/password.repository';
+import { AuthRepository } from '@/core/application/ports/authentication/auth.repository';
+import { PasswordRepository } from '@/core/application/ports/authentication/password.repository';
 import { isKnownError } from '@/core/application/utils/error-handler';
 
 interface IAuthService {

@@ -1,5 +1,4 @@
-import { Note } from '@prisma/client';
-
+import { Note } from '@/core/domain/entities/note.entity';
 import { ArchiveIcon } from '@/core/presentation/components/common/icons/archive-icon';
 import { DeleteIcon } from '@/core/presentation/components/common/icons/delete-icon';
 import { Button } from '@/core/presentation/components/common/ui/button';

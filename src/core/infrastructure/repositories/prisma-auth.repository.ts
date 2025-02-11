@@ -1,7 +1,7 @@
 import prisma from '@/config/libs/prisma';
 
 import { CreateUserDTO } from '../../application/dtos/user.dtos';
-import { AuthRepository } from '../../application/ports/auth.repository';
+import { AuthRepository } from '../../application/ports/authentication/auth.repository';
 import { User } from '../../domain/entities/user.entity';
 
 export class PrismaAuthRepository implements AuthRepository {

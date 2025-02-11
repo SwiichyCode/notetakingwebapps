@@ -1,7 +1,7 @@
 import prisma from '@/config/libs/prisma';
-import { CookieRepository } from '@/core/application/ports/cookie.repository';
-import { EmailRepository } from '@/core/application/ports/email.repository';
-import { PasswordRepository } from '@/core/application/ports/password.repository';
+import { CookieRepository } from '@/core/application/ports/authentication/cookie.repository';
+import { EmailRepository } from '@/core/application/ports/authentication/email.repository';
+import { PasswordRepository } from '@/core/application/ports/authentication/password.repository';
 import { AuthService } from '@/core/application/services/authentication/auth.service';
 import { EmailVerificationService } from '@/core/application/services/authentication/email-verification.service';
 import { ResetPasswordService } from '@/core/application/services/authentication/reset-password.service';

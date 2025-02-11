@@ -1,4 +1,4 @@
-import { EmailRepository } from '../../application/ports/email.repository';
+import { EmailRepository } from '../../application/ports/authentication/email.repository';
 
 export class MockEmailRepository implements EmailRepository {
   sendSignupConfirmationEmail = jest.fn();

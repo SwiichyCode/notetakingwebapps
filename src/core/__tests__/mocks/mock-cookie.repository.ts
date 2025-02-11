@@ -1,4 +1,4 @@
-import { CookieRepository } from '../../application/ports/cookie.repository';
+import { CookieRepository } from '../../application/ports/authentication/cookie.repository';
 
 export class MockCookieRepository implements CookieRepository {
   encrypt = jest.fn();

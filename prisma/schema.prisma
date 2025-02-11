@@ -43,6 +43,7 @@ model User {
 model Note {
   id        String   @id @default(cuid())
   title     String
+  slug      String   
   content   String
   tags      String[]
   userId    String

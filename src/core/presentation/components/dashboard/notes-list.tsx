@@ -4,12 +4,13 @@ import Link from 'next/link';
 
 import { NoteMock, notesMock } from '@/config/mocks/notes.mock';
 import { routes } from '@/config/routes';
+import { Note } from '@/core/domain/entities/note.entity';
 import { Button } from '@/core/presentation/components/common/ui/button';
 
 import { NotesNavigationEmpty } from './notes-navigation-empty';
 import { NotesNavigation } from './notes-navigations';
 
-export const NotesList = ({ notes = notesMock }: { notes?: NoteMock[] }) => {
+export const NotesList = ({ notes = notesMock }: { notes?: Note[] }) => {
   return (
     <aside className="space-y-4 border-r border-[#E0E4EA] p-5">
       <Link href={routes.createNote}>

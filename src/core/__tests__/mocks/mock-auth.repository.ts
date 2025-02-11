@@ -1,4 +1,4 @@
-import { AuthRepository } from '../../application/ports/auth.repository';
+import { AuthRepository } from '../../application/ports/authentication/auth.repository';
 
 export class MockAuthRepository implements AuthRepository {
   findUserByEmail = jest.fn();

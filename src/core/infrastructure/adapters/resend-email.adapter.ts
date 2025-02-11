@@ -1,5 +1,5 @@
 import { resend } from '@/config/libs/email';
-import { EmailRepository } from '@/core/application/ports/email.repository';
+import { EmailRepository } from '@/core/application/ports/authentication/email.repository';
 
 export class ResendEmailAdapter implements EmailRepository {
   async sendSignupConfirmationEmail(email: string, token: string): Promise<void> {

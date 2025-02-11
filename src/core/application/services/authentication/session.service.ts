@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { SessionConfig, SessionPayload } from '@/config/types/session.type';
 
-import { CookieRepository } from '../../ports/cookie.repository';
-import { SessionRepository } from '../../ports/session.repository';
+import { CookieRepository } from '../../ports/authentication/cookie.repository';
+import { SessionRepository } from '../../ports/authentication/session.repository';
 
 interface ISessionService {
   create(userId: string): Promise<void>;

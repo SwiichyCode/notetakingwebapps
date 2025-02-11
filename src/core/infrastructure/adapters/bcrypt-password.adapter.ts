@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 
-import { PasswordRepository } from '@/core/application/ports/password.repository';
+import { PasswordRepository } from '@/core/application/ports/authentication/password.repository';
 
 export class BcryptPasswordAdapter implements PasswordRepository {
   private readonly saltRounds = 10;

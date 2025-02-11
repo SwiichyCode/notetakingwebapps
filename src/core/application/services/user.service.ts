@@ -1,7 +1,7 @@
 'server-only';
 
 import { User } from '../../domain/entities/user.entity';
-import { AuthRepository } from '../ports/auth.repository';
+import { AuthRepository } from '../ports/authentication/auth.repository';
 
 interface IUserService {
   getUserById(userId: string): Promise<User | null>;

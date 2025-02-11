@@ -1,15 +1,15 @@
-import { Note } from '@prisma/client';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { ReactNode } from 'react';
 
+import { NoteResponseDTO } from '@/core/application/dtos/note.dtos';
 import { ClockIcon } from '@/core/presentation/components/common/icons/clock-icon';
 import { TagIcon } from '@/core/presentation/components/common/icons/tag-icon';
 import { Button } from '@/core/presentation/components/common/ui/button';
 import { ButtonSubmit } from '@/core/presentation/components/common/ui/button-submit';
 
-type NotesContentProps = {
-  note: Note;
+type NotesDisplayProps = {
+  note: NoteResponseDTO;
 };
 
 export const NoteTitle = ({ title }: { title: string }) => {
@@ -53,7 +53,7 @@ export const NoteActions = ({ isPending }: { isPending?: boolean }) => {
   );
 };
 
-export const NoteDisplay = ({ note }: NotesContentProps) => {
+export const NoteDisplay = ({ note }: NotesDisplayProps) => {
   return (
     <article className="grid w-full grid-rows-[auto_1fr] px-6 py-5">
       <header className="space-y-4">

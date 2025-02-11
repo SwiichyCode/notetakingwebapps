@@ -4,10 +4,10 @@ import {
   EmailVerificationDTO,
   ResendEmailVerificationDTO,
   SendExistingAccountAlertDTO,
-} from '@/core/application/dtos/email-verification.dtos';
+} from '@/core/application/dtos/authentication/email-verification.dtos';
 import { BadRequestError, ConflictError, NotFoundError } from '@/core/application/errors/custom-error';
-import { AuthRepository } from '@/core/application/ports/auth.repository';
-import { EmailRepository } from '@/core/application/ports/email.repository';
+import { AuthRepository } from '@/core/application/ports/authentication/auth.repository';
+import { EmailRepository } from '@/core/application/ports/authentication/email.repository';
 import { isKnownError } from '@/core/application/utils/error-handler';
 
 interface IEmailVerificationService {

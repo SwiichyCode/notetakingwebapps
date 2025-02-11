@@ -1,23 +1,24 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { cn } from '@/config/libs/utils';
+import { cn, slugify } from '@/config/libs/utils';
 import { NoteMock } from '@/config/mocks/notes.mock';
 import { routes } from '@/config/routes';
+import { Note } from '@/core/domain/entities/note.entity';
 
-export const NotesNavigation = ({ notes }: { notes: NoteMock[] }) => {
+export const NotesNavigation = ({ notes }: { notes: Note[] }) => {
   const pathname = usePathname();
 
   return (
     <nav>
-      {notes.map(({ id, title, tags, slug }, index) => {
-        const isActive = pathname === routes.dashboard + '/' + slug;
+      {notes.map(({ id, title, tags }, index) => {
+        const isActive = pathname === routes.dashboard + '/' + slugify(title);
         const isLastItem = index === notes.length - 1;
 
         return (
           <div key={id}>
             <Link
-              href={routes.dashboard + '/' + slug}
+              href={routes.dashboard + '/' + slugify(title)}
               className={cn(
                 'flex flex-col gap-1 rounded-md p-2 hover:bg-[#F3F5F8]',
                 isActive && 'bg-[#F3F5F8] transition-colors duration-200',
